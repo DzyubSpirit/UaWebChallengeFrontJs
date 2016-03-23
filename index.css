@@ -1,0 +1,50 @@
+.day-table {
+	display: table;
+	width: 100%;
+}
+
+.day-table > div, .week-labels-container {
+	display: table-row;
+}
+
+.day-table > div > div {
+	display: table-cell;
+	height: 40px;
+	border-width: 2px;
+	border-style: solid;
+	padding: 3px;
+	border-left: 0;
+	border-top: 0;
+}
+
+.day-table > div:not(.day-table-footer) > div:nth-child(n+2):hover {
+	outline: 2px solid blue;
+	outline-offset: -2px;
+	/*box-shadow: 0 0 10px 10px blue;*/
+}
+
+.day-table > div > div:first-of-type {
+	width: 150px;
+}
+
+.day-table > div:nth-child(2n+1) > div {
+	border-color: #ddd #eee;
+}
+
+.day-table > div:nth-child(2n) > div {
+	background-color: #eee;
+	border-color: #ddd #fff;
+}
+
+.day-table > div > div:last-of-type {
+	border-right: 0;
+}
+
+.day-table > div:last-child > div {
+	border-bottom: 0;
+}
+
+.day-table-footer > div  {
+	text-align: right;
+	vertical-align: middle;
+}
