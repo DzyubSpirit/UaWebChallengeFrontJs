@@ -8,6 +8,50 @@ window.onload = function() {
 
 	updateDateView();
 	
+	var CURSOR_HEIGHT_MULTIPLIER = 0.6;
+	var WEEK_CELL_PADDING = 3;
+
+	var cursor = document.createElement('div');
+	cursor.style.position = 'absolute'; 
+	cursor.style.width = 0;
+	cursor.style.outline = '1px solid green';
+	cursor.style.visibility = 'hidden';
+	document.body.appendChild(cursor);
+
+	var weekCells = document.querySelectorAll(
+		".day-table > div:not(.day-table-footer) > div:nth-child(n+2)");
+	[].forEach.call(weekCells, function(el) {
+		el.onmousemove = weekCellMouseMove;
+		el.onmouseout = weekCellMouseOut;
+	});
+
+	function weekCellMouseMove(e) {
+		var boundRect = this.getBoundingClientRect();
+		var cursorHeight = Math.floor(boundRect.height*CURSOR_HEIGHT_MULTIPLIER);
+		var offsetTop = Math.floor(boundRect.height - cursorHeight)/2; 
+		
+		var widthForDay = (boundRect.width-WEEK_CELL_PADDING*2) / DAYS_IN_WEEK;
+		var indexDayOfWeek = Math.round((e.pageX-boundRect.left-scrollX-WEEK_CELL_PADDING)/widthForDay);
+		// console.log(indexDayOfWeek+' '+widthForDay);
+		if (indexDayOfWeek == DAYS_IN_WEEK) {
+			indexDayOfWeek--;
+		}
+		if (indexDayOfWeek >= 0 && indexDayOfWeek < DAYS_IN_WEEK) {
+			var offsetLeft = Math.floor(indexDayOfWeek*widthForDay) + WEEK_CELL_PADDING;
+
+			cursor.style.left = boundRect.left+scrollX+offsetLeft+'px';
+			cursor.style.top  = boundRect.top+scrollY+offsetTop+'px';
+			cursor.style.height = cursorHeight+'px';
+			cursor.style.visibility = 'visible';
+		} else {
+			cursor.style.visibility = 'hidden';			
+		}
+	}
+
+	function weekCellMouseOut(e) {
+		cursor.style.visibility = 'hidden';
+	}
+
 	function updateDateView() {
 		var day_diff = (rightDate-leftDate)/MILLISEC_IN_DAY;
 		var toWeekBegin = leftDate.getDay()-1;
